@@ -36,7 +36,6 @@
 
 #include "thor-proto.h"
 
-#define USB_VENDOR_SAMSUNG "04e8"
 #define USB_DEVICE_Z100 "6601"
 #define USB_DEVICE_Z100_DEVGURU "6860"
 #define USB_DEVICE_DEVGURU "685d"
@@ -489,15 +488,6 @@ const char* find_usb_device(void)
 		strcat(usbpath, "/");
 		p = &usbpath[strlen(usbpath)];
 
-		/* match the vendor ID */
-		strcat(p, "idVendor");
-		getfile(usbpath, buffer, sizeof buffer);
-		if (opt_verbose)
-			fprintf(stderr, "vendorId = >%s< %zd\n", buffer,
-					strlen(buffer));
-		if (strcmp(buffer, USB_VENDOR_SAMSUNG))
-			continue;
-
 		/* match the product ID */
 		strcpy(p, "idProduct");
 		getfile(usbpath, buffer, sizeof buffer);
@@ -514,9 +504,6 @@ const char* find_usb_device(void)
 			strcmp(buffer, USB_DEVICE_DEVGURU))
 			continue;
 
-		if (opt_verbose)
-			fprintf(stderr, "found %s:%s!\n", USB_VENDOR_SAMSUNG,
-					buffer);
 		closedir(d);
 
 		p[0] = 0x00;
